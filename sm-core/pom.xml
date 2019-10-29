@@ -247,6 +247,12 @@
 		    <version>27.1-jre</version>
 		</dependency>
 
+		<!-- CoinPayments Client: https://github.com/brunocvcunha/coinpayments-java -->
+		<dependency>
+			<groupId>org.brunocvcunha.coinpayments</groupId>
+			<artifactId>coinpayments-java</artifactId>
+			<version>1.2</version>
+		</dependency>
 
 		<!-- tests dependencies -->
 		<!-- http://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->

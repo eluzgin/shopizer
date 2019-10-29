@@ -58,7 +58,7 @@ public class BraintreePayment implements PaymentModule {
 			}
 			errorFields.add("private_key");
 		}
-		
+
 		//validate integrationKeys['tokenization_key']
 		if(keys==null || StringUtils.isBlank(keys.get("tokenization_key"))) {
 			if(errorFields==null) {
@@ -66,7 +66,7 @@ public class BraintreePayment implements PaymentModule {
 			}
 			errorFields.add("tokenization_key");
 		}
-		
+
 		
 		if(errorFields!=null) {
 			IntegrationException ex = new IntegrationException(IntegrationException.ERROR_VALIDATION_SAVE);

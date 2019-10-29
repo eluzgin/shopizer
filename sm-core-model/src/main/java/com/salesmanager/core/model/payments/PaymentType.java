@@ -3,8 +3,12 @@ package com.salesmanager.core.model.payments;
 public enum PaymentType {
 	
 	
-	
-	CREDITCARD("creditcard"), FREE("free"), COD("cod"), MONEYORDER("moneyorder"), PAYPAL("paypal");
+	CRYPTOCURRENCY("cryptocurrency"),
+	CREDITCARD("creditcard"),
+	FREE("free"),
+	COD("cod"),
+	MONEYORDER("moneyorder"),
+	PAYPAL("paypal");
 
 	
 	private String paymentType;
