@@ -16,8 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.HttpClients;
 import org.brunocvcunha.coinpayments.CoinPayments;
 import org.brunocvcunha.coinpayments.model.BasicInfoResponse;
+import org.brunocvcunha.coinpayments.model.CreateTransactionResponse;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
 import org.brunocvcunha.coinpayments.requests.CoinPaymentsBasicAccountInfoRequest;
+import org.brunocvcunha.coinpayments.requests.CoinPaymentsCreateTransactionRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,29 +84,68 @@ public class CryptoPayment implements PaymentModule {
         }
 
         Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setPaymentType(payment.getPaymentType());
+        transaction.setTransactionDate(new Date());
+        transaction.setTransactionType(payment.getTransactionType());
         try {
             CoinPayments api = CoinPayments.builder()
                     .publicKey(publicKey)
                     .privateKey(privateKey)
                     .client(HttpClients.createDefault()).build();
             ResponseWrapper<BasicInfoResponse> accountInfo = api.sendRequest(new CoinPaymentsBasicAccountInfoRequest());
-            transaction.setDetails(accountInfo.toString());
+            transaction.setDetails(environment.getEnvironmentName() + ": " + accountInfo.toString());
+            return transaction;
         } catch (IOException ioex) {
-            LOGGER.error("Error intializing CoinPayments API", ioex);
+            LOGGER.error("Error initializing CoinPayments API", ioex);
             throw new IntegrationException("Error intializing CoinPayments API", ioex);
         }
-        transaction.setAmount(amount);
-        transaction.setPaymentType(payment.getPaymentType());
-        transaction.setTransactionDate(new Date());
-        transaction.setTransactionType(payment.getTransactionType());
-
-        return transaction;
-
     }
 
     @Override
     public Transaction authorize(MerchantStore store, Customer customer, List<ShoppingCartItem> items, BigDecimal amount, Payment payment, IntegrationConfiguration configuration, IntegrationModule module) throws IntegrationException {
-        return null;
+        Validate.notNull(configuration,"Configuration cannot be null");
+
+        String publicKey = configuration.getIntegrationKeys().get("public_key");
+        String privateKey = configuration.getIntegrationKeys().get("private_key");
+
+        Validate.notNull(publicKey,"public_key cannot be null");
+        Validate.notNull(privateKey,"private_key cannot be null");
+
+        Environment environment= Environment.PRODUCTION;
+        if (configuration.getEnvironment().equals("TEST")) {// sandbox
+            environment= Environment.SANDBOX;
+        }
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setPaymentType(payment.getPaymentType());
+        transaction.setTransactionDate(new Date());
+        transaction.setTransactionType(payment.getTransactionType());
+        try {
+            CoinPayments api = CoinPayments.builder()
+                    .publicKey(publicKey)
+                    .privateKey(privateKey)
+                    .client(HttpClients.createDefault()).build();
+            ResponseWrapper<CreateTransactionResponse> txResponse = api.sendRequest(CoinPaymentsCreateTransactionRequest.builder().amount(amount.doubleValue())
+                    .currencyPrice(payment.getCurrency().getCode())
+                    .currencyTransfer("BTC")
+                    .callbackUrl(store.getContinueshoppingurl())
+                    .custom(customer.getEmailAddress())
+                    .build());
+            String txError = txResponse.getError();
+            if(txError != null && txError.equalsIgnoreCase("OK")) {
+                CreateTransactionResponse result = txResponse.getResult();
+                transaction.setDetails(result.getTransactionId());
+            } else {
+                LOGGER.warn("Error in transaction "+txResponse.toString());
+                transaction.setDetails("Error: "+txError);
+            }
+            return transaction;
+        } catch (IOException ioex) {
+            LOGGER.error("Error intializing CoinPayments API", ioex);
+            throw new IntegrationException("Error intializing CoinPayments API", ioex);
+        }
     }
 
     @Override
