@@ -142,8 +142,7 @@ public class CryptoPayment implements PaymentModule {
             String txError = txResponse.getError();
             if(txError != null && txError.equalsIgnoreCase("OK")) {
                 CreateTransactionResponse result = txResponse.getResult();
-                transaction.setTransactionId(result.getTransactionId());
-                transaction.setDetails("Successful transaction: "+result.getTransactionId());
+                transaction.setDetails(result.getTransactionId());
             } else {
                 LOGGER.warn("Error in transaction "+txResponse.toString());
                 transaction.setDetails("Error: "+txError);
@@ -165,11 +164,10 @@ public class CryptoPayment implements PaymentModule {
         Validate.notNull(publicKey,"public_key cannot be null");
         Validate.notNull(privateKey,"private_key cannot be null");
 
-        String transactionId = capturableTransaction.getTransactionId();
         String details = capturableTransaction.getDetails();
-        if(transactionId == null) {
-            LOGGER.error("Failed to retrieve transaction id - "+details);
-            throw new IntegrationException("Failed to retrieve transaction id - "+details);
+        if(details == null || details.contains("Error")) {
+            LOGGER.error(details);
+            throw new IntegrationException("Failed to retrieve transaction id: "+details);
         }
         Transaction transaction = new Transaction();
         try {
@@ -178,7 +176,7 @@ public class CryptoPayment implements PaymentModule {
                     .privateKey(privateKey)
                     .client(HttpClients.createDefault()).build();
             ResponseWrapper<TransactionDetailsResponse> txResponse = api.sendRequest(
-                    CoinPaymentsGetTransactionInfoRequest.builder().txid(transactionId)
+                    CoinPaymentsGetTransactionInfoRequest.builder().txid(details)
                         .build());
             TransactionDetailsResponse txResult = txResponse.getResult();
 

@@ -78,10 +78,6 @@ public class Transaction extends SalesManagerEntity<Long, Transaction> implement
 	@Column(name="PAYMENT_TYPE")
 	@Enumerated(value = EnumType.STRING)
 	private PaymentType paymentType;
-
-	@Column(name="TRANSACTION_ID")
-	@Enumerated(value = EnumType.STRING)
-	private String transactionId;
 	
 	@Column(name="DETAILS")
 	@Type(type = "org.hibernate.type.TextType")
@@ -142,14 +138,6 @@ public class Transaction extends SalesManagerEntity<Long, Transaction> implement
 
 	public void setTransactionType(TransactionType transactionType) {
 		this.transactionType = transactionType;
-	}
-
-	public String getTransactionId() {
-		return transactionId;
-	}
-
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
 	}
 
 	public PaymentType getPaymentType() {

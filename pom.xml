@@ -88,6 +88,7 @@
 			<version>${jackson-version-databind}</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/net.sf.ehcache/ehcache -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>

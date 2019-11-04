@@ -15,7 +15,7 @@ import com.salesmanager.core.modules.integration.IntegrationException;
 
 public interface PaymentModule {
 	
-	void validateModuleConfiguration(IntegrationConfiguration integrationConfiguration, MerchantStore store) throws IntegrationException;
+	public void validateModuleConfiguration(IntegrationConfiguration integrationConfiguration, MerchantStore store) throws IntegrationException;
 	
 
 	/**
@@ -30,24 +30,24 @@ public interface PaymentModule {
 	 * @return Transaction a Transaction
 	 * @throws IntegrationException IntegrationException
 	 */
-	Transaction initTransaction(
+	public Transaction initTransaction(
 			MerchantStore store, Customer customer, BigDecimal amount, Payment payment, IntegrationConfiguration configuration, IntegrationModule module)
 			throws IntegrationException;
 	
-	Transaction authorize(
+	public Transaction authorize(
 			MerchantStore store, Customer customer, List<ShoppingCartItem> items, BigDecimal amount, Payment payment, IntegrationConfiguration configuration, IntegrationModule module)
 			throws IntegrationException;
 
 	
-	Transaction capture(
+	public Transaction capture(
 			MerchantStore store, Customer customer, Order order, Transaction capturableTransaction, IntegrationConfiguration configuration, IntegrationModule module)
 			throws IntegrationException;
 	
-	Transaction authorizeAndCapture(
+	public Transaction authorizeAndCapture(
 			MerchantStore store, Customer customer, List<ShoppingCartItem> items, BigDecimal amount, Payment payment, IntegrationConfiguration configuration, IntegrationModule module)
 			throws IntegrationException;
 	
-	Transaction refund(
+	public Transaction refund(
 			boolean partial, MerchantStore store, Transaction transaction, Order order, BigDecimal amount, IntegrationConfiguration configuration, IntegrationModule module)
 			throws IntegrationException;
 
