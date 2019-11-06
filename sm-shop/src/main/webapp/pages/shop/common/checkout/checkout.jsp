@@ -495,6 +495,12 @@ function bindActions() {
 			log('Payment method type -> ' + $('input[name=paymentMethodType]').val());
 			submitForm()
 		}
+		else if(paymentSelection.indexOf('coinpayments') >= 0) {
+			log('CoinPayments order ' + $('input[name=paymentMethodType]').val());
+			$('#paymentMethodType').attr("value", 'CRYPTOCURRENCY');
+			log('Payment method type -> ' + $('input[name=paymentMethodType]').val());
+			submitForm()
+		}
 		else if(paymentSelection.indexOf('beanstream') >= 0) {
 			//console.log('Beanstream ');
 			$('#paymentMethodType').val('CREDITCARD');

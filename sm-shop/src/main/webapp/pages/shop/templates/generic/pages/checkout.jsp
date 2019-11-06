@@ -463,7 +463,7 @@ function bindActions() {
 			//$('#paymentMethodType').val('CREDITCARD');
 			$('#paymentMethodType').attr("value", 'MONEYORDER');
 			log('Payment method type -> ' + $('input[name=paymentMethodType]').val());
-			submitForm();
+			initCryptoPayment();
 		}
 		else if(paymentSelection.indexOf('beanstream') >= 0) {
 			//log('Beanstream ');

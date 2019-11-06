@@ -16,7 +16,6 @@ import com.salesmanager.core.modules.integration.payment.model.PaymentModule;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.client.HttpClients;
-import org.brunocvcunha.coinpayments.CoinPayments;
 import org.brunocvcunha.coinpayments.model.BasicInfoResponse;
 import org.brunocvcunha.coinpayments.model.CreateTransactionResponse;
 import org.brunocvcunha.coinpayments.model.ResponseWrapper;
@@ -39,9 +38,9 @@ import java.util.Map;
  * https://www.coinpayments.net/apidoc
  * @author Eugene Luzgin <eugene@eostribe.io>
  */
-public class CryptoPayment implements PaymentModule {
+public class CoinPayments implements PaymentModule {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CryptoPayment.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CoinPayments.class);
 
     @Override
     public void validateModuleConfiguration(IntegrationConfiguration integrationConfiguration, MerchantStore store) throws IntegrationException {
@@ -93,7 +92,7 @@ public class CryptoPayment implements PaymentModule {
         transaction.setTransactionDate(new Date());
         transaction.setTransactionType(payment.getTransactionType());
         try {
-            CoinPayments api = CoinPayments.builder()
+            org.brunocvcunha.coinpayments.CoinPayments api = org.brunocvcunha.coinpayments.CoinPayments.builder()
                     .publicKey(publicKey)
                     .privateKey(privateKey)
                     .client(HttpClients.createDefault()).build();
@@ -127,7 +126,7 @@ public class CryptoPayment implements PaymentModule {
         transaction.setTransactionDate(new Date());
         transaction.setTransactionType(payment.getTransactionType());
         try {
-            CoinPayments api = CoinPayments.builder()
+            org.brunocvcunha.coinpayments.CoinPayments api = org.brunocvcunha.coinpayments.CoinPayments.builder()
                     .publicKey(publicKey)
                     .privateKey(privateKey)
                     .client(HttpClients.createDefault()).build();
@@ -171,7 +170,7 @@ public class CryptoPayment implements PaymentModule {
         }
         Transaction transaction = new Transaction();
         try {
-            CoinPayments api = CoinPayments.builder()
+            org.brunocvcunha.coinpayments.CoinPayments api = org.brunocvcunha.coinpayments.CoinPayments.builder()
                     .publicKey(publicKey)
                     .privateKey(privateKey)
                     .client(HttpClients.createDefault()).build();

@@ -52,14 +52,7 @@
 		"version":"1.0",
 		"regions": ["*"]
 	},
-	{
-		"module": "PAYMENT",
-		"code": "moneyorder",
-		"type":"moneyorder",
-		"version":"",
-		"regions": ["*"],
-		"image":"moneyorder.gif"
-	},
+
 	{
 		"module": "PAYMENT",
 		"code": "paypal-express-checkout",
@@ -104,7 +97,17 @@
 		"image":"braintree.jpg",
 		"configuration":[{"env":"TEST","scheme":"https","host":"NOTREQUIRED","port":"NOTREQUIRED","uri":"NOTREQUIRED"},{"env":"PROD","scheme":"https","host":"NOTREQUIRED","port":"NOTREQUIRED","uri":"NOTREQUIRED"}]
 
-	}
+	},
 
+	{
+		"module": "PAYMENT",
+		"code": "coinpayments",
+		"type":"cryptopayment",
+		"version":"",
+		"regions": ["*"],
+		"image":"coinpayments.png",
+		"configuration":[{"env":"TEST","scheme":"https","host":"NOTREQUIRED","port":"NOTREQUIRED","uri":"NOTREQUIRED"},{"env":"PROD","scheme":"https","host":"NOTREQUIRED","port":"NOTREQUIRED","uri":"NOTREQUIRED"}]
+
+	}
 ] 
 
